@@ -11,11 +11,11 @@ public class GameMain {
 
         //Game vars
         //TODO read enemies in from flat flie/data source
-        String[] enemies = {"Skeleton", "Zombie", "Warrior", "Assassin", "Ghoul", "Tusker", "Dire Wolf", "Giant Rat", "Giant Spider", "Swarm of Rats", "Gelatinous Cube"};
-        String[] wep = {"Dagger", "Spear", "Crossbow", "Long Sword", "Short Sword", "Saber", "Maul", "Morning Star", "Great Axe", "Staff", "Mace", "Warhammer"};
+        String[] enemies = {"Skeleton", "Zombie", "Warrior", "Assassin", "Ghoul", "Tusker", "Dire Wolf", "Giant Rat", "Giant Spider", "Swarm of Rats", "Gelatinous Cube", "Drow"};
+        String[] wep = {"Dagger", "Spear", "Crossbow", "Long Sword", "Short Sword", "Saber", "Maul", "Morning Star", "Great Axe", "Staff", "Mace", "Warhammer", "Flail"};
         String[] arm = {"Bronze Chestplate", "Chainmail Shirt", "Leather Bracers", "Wooden Buckler"};
         String[] trait = {"Shiny", "Rusty", "Bent", "Blazing", "Frozen"};
-        String[] quality = {"Common", "Uncommon", "Rare", "Epic", "Artifact", "Mythical"};
+        String[] quality = {"Uncommon", "Rare", "Epic", "Artifact", "Mythical"};
         int level = 1;
         int maxEnemyhealth = 18 + level;
         int maxEnemyAtkDmg = 12 + level;
@@ -38,11 +38,12 @@ public class GameMain {
         int wepDropChance = 15; //%
         int armDropChance = 10; //%
         int exploreChance = 35; //%
+        int bossCrowns = 0;
 
         boolean running = true;
         boolean pickClass = false;
 
-        System.out.println("Welcome to the Dungeon!");
+        System.out.println("Welcome to the Deep Down Dark!");
         System.out.println("\n\tWhat class would you like to play?");
         System.out.println("\t1. Fighter");
         System.out.println("\t2. Bard");
@@ -190,16 +191,29 @@ public class GameMain {
 
                     //Set enemy stats based on enemy type and current dungeon level
                     if (enemy == "Zombie") {
-                        if (level > 3) {
-                            enemy = "Shambling Zombie";
-                            System.out.println("This zombie has a strange aura and is far more aggressive!");
-                            maxEnemyAtkDmg += level;
-                        } else if (level > 6) {
-                            enemy = "Shambling Zombie Lord";
+                        if (level > 6) {
+                            System.out.println("-------------------------------------------------------------------------------------");
+                            System.out.println("BOSS ENCOUNTER!!");
+                            System.out.println("-------------------------------------------------------------------------------------");
+                            enemy = "Hulking Zombie Lord";
                             System.out.println("With a crown of bone upon its rotting head, it moves to devour you!");
                             maxEnemyAtkDmg += level;
                             maxEnemyhealth += level;
-                            enemyHealth += 10;
+                            enemyHealth += 30;
+                        }
+
+                    }
+
+                    if (enemy == "Giant Spider") {
+                        if (level > 7) {
+                            System.out.println("-------------------------------------------------------------------------------------");
+                            System.out.println("BOSS ENCOUNTER!!");
+                            System.out.println("-------------------------------------------------------------------------------------");
+                            enemy = "Widow Queen";
+                            System.out.println("With a crown of web upon her black head, she lunges to crush you!");
+                            maxEnemyAtkDmg += level;
+                            maxEnemyhealth += level;
+                            enemyHealth += 40;
                         }
 
                     }
@@ -287,6 +301,7 @@ public class GameMain {
                     System.out.println("\tARMOR FIND CHANCE: " + armDropChance + "%");
                     System.out.println("\tSPOT CHANCE: " + exploreChance + "%");
                     System.out.println("\tGOLD: " + gold);
+                    System.out.println("\tBOSS CROWNS: " + bossCrowns);
 
                     System.out.println("-------------------------------------------------------------------------------------");
                     System.out.println("END OF CHARACTER SHEET");
@@ -371,6 +386,18 @@ public class GameMain {
             System.out.println(" # You find " + goldAward + " gold!");
             gold += goldAward;
             System.out.println(" # Your total gold is: " + gold);
+
+            //If the monster killed was a boss
+            if (enemy == "Widow Queen"){
+                System.out.println("Congratulations on defeating the Widow Queen!");
+                bossCrowns ++;
+            }
+
+            if (enemy == "Hulking Zombie Lord"){
+                System.out.println("Congratulations on defeating the Hulking Zombie Lord!");
+                bossCrowns ++;
+            }
+
             //Health potion drop chance
             if (rand.nextInt(100) < hpPotDropChance) {
                 numHpPots++;
@@ -388,10 +415,43 @@ public class GameMain {
             //Weapon drop chance
             if (rand.nextInt(100) < wepDropChance) {
 
-                String wepType = wep[rand.nextInt(wep.length)];
-                System.out.println(" # You find a " + wepType + " of " + enemy + " slaying +1! # ");
-                atkDmg += 1;
-                System.out.println(" # Your atkDmg is now: " + atkDmg + " # ");
+                if(rand.nextInt(100) >= luck){
+
+                    String wepType = wep[rand.nextInt(wep.length)];
+                    String qualityType = quality[rand.nextInt(quality.length)];
+                    System.out.println(" # LUCKY! You find a " + wepType + " of " + qualityType + " quality! #");
+
+                    //"Uncommon", "Rare", "Epic", "Artifact", "Mythical"
+                    if(qualityType == "Uncommon"){
+                        atkDmg += 2;
+                    }
+
+                    if(qualityType == "Rare"){
+                        atkDmg += 3;
+                    }
+
+                    if(qualityType == "Epic"){
+                        atkDmg += 4;
+                    }
+
+                    if(qualityType == "Artifact"){
+                        atkDmg += 5;
+                    }
+
+                    if(qualityType == "Mythical"){
+                        atkDmg += 6;
+                    }
+
+                    System.out.println(" # Your atkDmg is now: " + atkDmg + " # ");
+
+                }else{
+
+                    String wepType = wep[rand.nextInt(wep.length)];
+                    System.out.println(" # You find a " + wepType + " of " + enemy + " slaying +1! # ");
+                    atkDmg += 1;
+                    System.out.println(" # Your atkDmg is now: " + atkDmg + " # ");
+
+                }
 
             }
 
@@ -455,6 +515,50 @@ public class GameMain {
                         numHpPots = 0;
                     }
                     System.out.println("You rush to your feet, weapon in hand! The thief evades you and disappears into the dark. You have lost a healing potion.");
+                } else if (rand.nextInt(100) < luck){
+                    System.out.println("Hail Hero! I am the traveling merchant, would you like to see my wares?");
+                    System.out.println("-------------------------------------------------------------------------------------");
+                    System.out.println("Merchant Menu");
+                    System.out.println("-------------------------------------------------------------------------------------");
+
+                    System.out.println("\t1. Buy items");
+                    System.out.println("\t0. Exit");
+
+                    input = scanIn.nextLine();
+
+                    if(input.equals("1")){
+                        System.out.println("-------------------------------------------------------------------------------------");
+                        System.out.println("Merchant Menu");
+                        System.out.println("-------------------------------------------------------------------------------------");
+
+                        System.out.println("\t1. Scroll of MAX HP+ - 50g");
+                        System.out.println("\t2. Scroll of MAX MP+ - 50g");
+
+                        input = scanIn.nextLine();
+
+                        if(input.equals("1")){
+                            System.out.println("Wise choice Hero, can't go wrong with more health!");
+
+                            if(gold >= 50){
+                                hp += 10+level;
+                                gold -= 50;
+
+                                System.out.println("You now have " + gold + " remaining");
+                            }
+
+                        }else if(input.equals("2")){
+                            System.out.println("Ah caster type eh? Well more mana means more magic!");
+
+                            if(gold >= 50){
+                                mp += 10+level;
+                                gold -= 50;
+
+                                System.out.println("You now have " + gold + " remaining");
+                            }
+                        }
+                    }else if(input.equals("0")){
+                        System.out.println("Farewell Hero...");
+                    }
                 }
             } else if (input.equals("2")) {
                 System.out.println("You escape the dungeon with your life and loot. Though you wonder what may await you deeper yet.");
