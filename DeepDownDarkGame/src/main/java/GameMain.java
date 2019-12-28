@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -7,8 +9,16 @@ public class GameMain {
 
     JFrame window;
     Container con;
-    JPanel titleNamePanel;
+    JPanel titleNamePanel, startButtonPanel, mainTextPanel;
     JLabel titleNameLabel;
+    JButton startButton;
+    JTextArea mainTextArea;
+
+    TitleScreenHandler tsHandler = new TitleScreenHandler();
+
+    //Fonts
+    Font titleFont = new Font("Times New Roman", Font.PLAIN, 60);
+    Font normalFont = new Font("Times New Roman", Font.PLAIN, 30);
 
     public static void main(String[] args) {
 
@@ -24,13 +34,29 @@ public class GameMain {
         window.setLayout(null);
         con = window.getContentPane();
 
+        //Title
         titleNamePanel = new JPanel();
         titleNamePanel.setBounds(100, 100, 600, 150);
-        titleNamePanel.setBackground(Color.BLUE);
+        titleNamePanel.setBackground(Color.BLACK);
         titleNameLabel = new JLabel("DEEP DOWN DARK");
-        titleNameLabel.setForeground(Color.white);
+        titleNameLabel.setForeground(Color.WHITE);
+        titleNameLabel.setFont(titleFont);
+
+        //Start button
+        startButtonPanel = new JPanel();
+        startButtonPanel.setBounds(300, 400, 200, 100);
+        startButtonPanel.setBackground(Color.BLACK);
+
+        startButton = new JButton("START");
+        startButton.setBackground(Color.WHITE);
+        startButton.setForeground(Color.BLACK);
+        startButton.setFont(normalFont);
+        startButton.addActionListener(tsHandler);
+
         titleNamePanel.add(titleNameLabel);
+        startButtonPanel.add(startButton);
         con.add(titleNamePanel);
+        con.add(startButtonPanel);
 
         window.setVisible(true);
 
@@ -602,5 +628,34 @@ public class GameMain {
         System.out.println("#######################");
 
 
+    }
+
+    public void createGameScreen(){
+
+        //Disable previous panels
+        titleNamePanel.setVisible(false);
+        startButtonPanel.setVisible(false);
+
+        mainTextPanel = new JPanel();
+        mainTextPanel.setBounds(100, 100, 600, 250);
+        mainTextPanel.setBackground(Color.BLUE);
+        con.add(mainTextPanel);
+
+        mainTextArea = new JTextArea();
+        mainTextArea.setBounds(100, 100, 600, 250);
+        mainTextArea.setBackground(Color.BLACK);
+        mainTextArea.setForeground(Color.WHITE);
+        mainTextArea.setFont(normalFont);
+        mainTextArea.setLineWrap(true);
+        mainTextPanel.add(mainTextArea);
+    }
+
+    public class TitleScreenHandler implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            createGameScreen();
+        }
     }
 }
