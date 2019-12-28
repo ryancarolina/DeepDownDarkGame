@@ -1,10 +1,14 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 import java.util.Scanner;
 
 public class GameMain {
 
     JFrame window;
+    Container con;
+    JPanel titleNamePanel;
+    JLabel titleNameLabel;
 
     public static void main(String[] args) {
 
@@ -14,6 +18,21 @@ public class GameMain {
     public GameMain(){
 
         window = new JFrame();
+        window.setSize(800, 600);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.getContentPane().setBackground(Color.BLACK);
+        window.setLayout(null);
+        con = window.getContentPane();
+
+        titleNamePanel = new JPanel();
+        titleNamePanel.setBounds(100, 100, 600, 150);
+        titleNamePanel.setBackground(Color.BLUE);
+        titleNameLabel = new JLabel("DEEP DOWN DARK");
+        titleNameLabel.setForeground(Color.white);
+        titleNamePanel.add(titleNameLabel);
+        con.add(titleNamePanel);
+
+        window.setVisible(true);
 
         //System objects
         Scanner scanIn = new Scanner(System.in);
@@ -581,6 +600,7 @@ public class GameMain {
         System.out.println("#######################");
         System.out.println("# Thanks for playing! #");
         System.out.println("#######################");
+
 
     }
 }
