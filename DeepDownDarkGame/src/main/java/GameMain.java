@@ -9,9 +9,9 @@ public class GameMain {
 
     JFrame window;
     Container con;
-    JPanel titleNamePanel, startButtonPanel, mainTextPanel;
+    JPanel titleNamePanel, startButtonPanel, mainTextPanel, choiceButtonPanel;
     JLabel titleNameLabel;
-    JButton startButton;
+    JButton startButton, choice1, choice2, choice3, choice4;
     JTextArea mainTextArea;
 
     TitleScreenHandler tsHandler = new TitleScreenHandler();
@@ -638,16 +638,46 @@ public class GameMain {
 
         mainTextPanel = new JPanel();
         mainTextPanel.setBounds(100, 100, 600, 250);
-        mainTextPanel.setBackground(Color.BLUE);
+        mainTextPanel.setBackground(Color.BLACK);
         con.add(mainTextPanel);
 
-        mainTextArea = new JTextArea();
+        mainTextArea = new JTextArea("This is the main text area.");
         mainTextArea.setBounds(100, 100, 600, 250);
         mainTextArea.setBackground(Color.BLACK);
         mainTextArea.setForeground(Color.WHITE);
         mainTextArea.setFont(normalFont);
         mainTextArea.setLineWrap(true);
         mainTextPanel.add(mainTextArea);
+
+        choiceButtonPanel = new JPanel();
+        choiceButtonPanel.setBounds(250, 350, 300, 150);
+        choiceButtonPanel.setBackground(Color.BLACK);
+        choiceButtonPanel.setLayout(new GridLayout(4, 1));
+        con.add(choiceButtonPanel);
+
+        choice1 = new JButton("1");
+        choice1.setBackground(Color.WHITE);
+        choice1.setForeground(Color.BLACK);
+        choice1.setFont(normalFont);
+        choiceButtonPanel.add(choice1);
+
+        choice2 = new JButton("2");
+        choice2.setBackground(Color.WHITE);
+        choice2.setForeground(Color.BLACK);
+        choice2.setFont(normalFont);
+        choiceButtonPanel.add(choice2);
+
+        choice3 = new JButton("3");
+        choice3.setBackground(Color.WHITE);
+        choice3.setForeground(Color.BLACK);
+        choice3.setFont(normalFont);
+        choiceButtonPanel.add(choice3);
+
+        choice4 = new JButton("4");
+        choice4.setBackground(Color.WHITE);
+        choice4.setForeground(Color.BLACK);
+        choice4.setFont(normalFont);
+        choiceButtonPanel.add(choice4);
     }
 
     public class TitleScreenHandler implements ActionListener{
