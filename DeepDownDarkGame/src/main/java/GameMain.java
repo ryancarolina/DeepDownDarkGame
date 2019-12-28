@@ -1,9 +1,19 @@
+import javax.swing.*;
 import java.util.Random;
 import java.util.Scanner;
 
 public class GameMain {
 
+    JFrame window;
+
     public static void main(String[] args) {
+
+        new GameMain();
+    }
+
+    public GameMain(){
+
+        window = new JFrame();
 
         //System objects
         Scanner scanIn = new Scanner(System.in);
@@ -571,5 +581,6 @@ public class GameMain {
         System.out.println("#######################");
         System.out.println("# Thanks for playing! #");
         System.out.println("#######################");
+
     }
 }
