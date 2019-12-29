@@ -8,7 +8,7 @@ public class GameMain {
     JFrame window;
     Container con;
     JPanel titleNamePanel, startButtonPanel, mainTextPanel, choiceButtonPanel, playerPanel;
-    JLabel titleNameLabel, classLabel, hpLabel, mpLabel, weaponLable, acLabel, goldLabel, bossCrownLabel, locLabel;
+    JLabel titleNameLabel, classLabel, hpLabel, mpLabel, weaponLable, acLabel, goldLabel, bossCrownLabel, locLabel, healingLabel, luckLabel;
     JButton startButton, choice1, choice2, choice3, choice4, choice5, choice6;
     JTextArea mainTextArea;
 
@@ -161,7 +161,7 @@ public class GameMain {
         choiceButtonPanel.add(choice6);
 
         playerPanel = new JPanel();
-        playerPanel.setBounds(100, 15, 600, 50);
+        playerPanel.setBounds(100, 15, 800, 50);
         playerPanel.setBackground(Color.BLACK);
         playerPanel.setLayout(new GridLayout(1, 4));
         con.add(playerPanel);
@@ -186,6 +186,11 @@ public class GameMain {
         acLabel.setForeground(Color.WHITE);
         playerPanel.add(acLabel);
 
+        healingLabel = new JLabel();
+        healingLabel.setFont(smallFont);
+        healingLabel.setForeground(Color.WHITE);
+        playerPanel.add(healingLabel);
+
         mpLabel = new JLabel();
         mpLabel.setFont(smallFont);
         mpLabel.setForeground(Color.WHITE);
@@ -195,6 +200,11 @@ public class GameMain {
         goldLabel.setFont(smallFont);
         goldLabel.setForeground(Color.WHITE);
         playerPanel.add(goldLabel);
+
+        luckLabel = new JLabel();
+        luckLabel.setFont(smallFont);
+        luckLabel.setForeground(Color.WHITE);
+        playerPanel.add(luckLabel);
 
         bossCrownLabel = new JLabel();
         bossCrownLabel.setFont(smallFont);
@@ -238,6 +248,8 @@ public class GameMain {
          bossCrownLabel.setText("Crowns:" + bossCrowns);
          weaponLable.setText("Wep:");
          locLabel.setText("Loc:" + location);
+         healingLabel.setText("Heal:" + hpPotsHealingAmount);
+         luckLabel.setText("Luck:" + luck);
 
          townGate();
     }
@@ -258,7 +270,7 @@ public class GameMain {
     public void townGate(){
         location = "Town Gate";
         locLabel.setText("Loc:Town Gate");
-        mainTextArea.setText("Welcome to Deep Down Dark!\nWhat Class would you like to play?");
+        mainTextArea.setText("Welcome to Deep Down Dark!\n\nWhat Class would you like to play?");
 
         choice1.setText("Fighter");
         choice2.setText("Bard");
@@ -271,7 +283,7 @@ public class GameMain {
     public void roadOutsideTownGate(){
         location = "Road Outside Town";
         locLabel.setText("Loc:Road outside town");
-        mainTextArea.setText("It's early morning, with a slight chill in the air. \n The sky is clear and the wind is at your back.\n What will you do?");
+        mainTextArea.setText("It's early morning, with a slight chill in the air. \n The sky is clear and the wind is at your back.\n\n What will you do?");
 
         choice1.setText("Back to town");
         choice2.setText("Enter the DEEP DOWN DARK");
@@ -281,16 +293,29 @@ public class GameMain {
         choice6.setText("");
     }
 
+    public void deepDownDark(){
+        location = "DEEP DOWN DARK";
+        locLabel.setText("Loc:DEEP DOWN DARK");
+        mainTextArea.setText("You enter the DEEP DOWN DARK with clear eyes \nand hope in your heart!\n\n What will you do?");
+
+        choice1.setText("Light your torch and have at them!");
+        choice2.setText("Ponder your life choices");
+        choice3.setText("");
+        choice4.setText("");
+        choice5.setText("");
+        choice6.setText("Back to the road");
+    }
+
     public void fighter(){
         location = "Fighter Selection";
         locLabel.setText("Loc:Town Gate");
-        mainTextArea.setText("You have chosen the Fighter! \nThey start with extra HP.");
+        mainTextArea.setText("You have chosen the Fighter! \nThey start with a little extra HP and AC.");
 
         //Redraw the UI after a stat change
-        hp += 8;
+        hp += 4;
         hpLabel.setText("HP:" + hp);
 
-        ac += 5;
+        ac += 4;
         acLabel.setText("AC:" + ac);
 
         pickClass = true;
@@ -309,11 +334,14 @@ public class GameMain {
     public void bard(){
         location = "Bard Selection";
         locLabel.setText("Loc:Town Gate");
-        mainTextArea.setText("You have chosen the Bard! \nThey start with extra MP");
+        mainTextArea.setText("You have chosen the Bard! \nThey start with a little extra MP and Gold");
 
         //Redraw the UI after a stat change
-        mp += 8;
+        mp += 4;
         mpLabel.setText("MP:" + mp);
+
+        gold += 10;
+        goldLabel.setText("GP:" + gold);
 
         pickClass = true;
 
@@ -321,6 +349,103 @@ public class GameMain {
         classLabel.setText("Class:" + classType);
 
         choice1.setText("Onward to adventure, bard!");
+        choice2.setText("");
+        choice3.setText("");
+        choice4.setText("");
+        choice5.setText("");
+        choice6.setText("");
+    }
+
+    public void wizard(){
+        location = "Wizard Selection";
+        locLabel.setText("Loc:Town Gate");
+        mainTextArea.setText("You have chosen the Wizard! \nThey start with extra MP.");
+
+        //Redraw the UI after a stat change
+        mp += 10;
+        mpLabel.setText("MP:" + mp);
+
+        pickClass = true;
+
+        classType = "Wizard";
+        classLabel.setText("Class:" + classType);
+
+        choice1.setText("Onward to adventure, wizard!");
+        choice2.setText("");
+        choice3.setText("");
+        choice4.setText("");
+        choice5.setText("");
+        choice6.setText("");
+    }
+
+    public void cleric(){
+        location = "Cleric Selection";
+        locLabel.setText("Loc:Town Gate");
+        mainTextArea.setText("You have chosen the Cleric! \nThey start with a little extra HP and Healing %.");
+
+        //Redraw the UI after a stat change
+        hp += 10;
+        hpLabel.setText("HP:" + hp);
+
+        hpPotsHealingAmount += 5;
+        healingLabel.setText("Heal:" + hpPotsHealingAmount);
+
+        pickClass = true;
+
+        classType = "Cleric";
+        classLabel.setText("Class:" + classType);
+
+        choice1.setText("Onward to adventure, cleric!");
+        choice2.setText("");
+        choice3.setText("");
+        choice4.setText("");
+        choice5.setText("");
+        choice6.setText("");
+    }
+
+    public void rogue(){
+        location = "Rogue Selection";
+        locLabel.setText("Loc:Town Gate");
+        mainTextArea.setText("You have chosen the Rouge! \nThey start with extra luck and a little AC.");
+
+        //Redraw the UI after a stat change
+        luck += 8;
+        luckLabel.setText("Luck:" + luck);
+
+        ac += 2;
+        acLabel.setText("AC:" + ac);
+
+        pickClass = true;
+
+        classType = "Rogue";
+        classLabel.setText("Class:" + classType);
+
+        choice1.setText("Onward to adventure, Rogue!");
+        choice2.setText("");
+        choice3.setText("");
+        choice4.setText("");
+        choice5.setText("");
+        choice6.setText("");
+    }
+
+    public void monk(){
+        location = "Fighter Selection";
+        locLabel.setText("Loc:Town Gate");
+        mainTextArea.setText("You have chosen the Fighter! \nThey start with extra HP.");
+
+        //Redraw the UI after a stat change
+        hp += 8;
+        hpLabel.setText("HP:" + hp);
+
+        ac += 5;
+        acLabel.setText("AC:" + ac);
+
+        pickClass = true;
+
+        classType = "Fighter";
+        classLabel.setText("Class:" + classType);
+
+        choice1.setText("Onward to adventure, fighter!");
         choice2.setText("");
         choice3.setText("");
         choice4.setText("");
@@ -349,11 +474,18 @@ public class GameMain {
                     switch(yourChoice){
                         case "c1": fighter(); break;
                         case "c2": bard(); break;
-                        case "c3": break;
+                        case "c3": wizard(); break;
+                        case "c4": cleric(); break;
+                        case "c5": rogue(); break;
+                        case "c6": monk(); break;
                     }
                     break;
                 case "Fighter Selection":
                 case "Bard Selection":
+                case "Wizard Selection":
+                case "Cleric Selection":
+                case "Rogue Selection":
+                case "Monk Selection":
                     switch(yourChoice){
                         case "c1": roadOutsideTownGate(); break;
                     }
@@ -361,6 +493,7 @@ public class GameMain {
                 case "Road Outside Town":
                     switch(yourChoice){
                         case "c1": town(); break;
+                        case "c2": deepDownDark(); break;
                     }
                 case "Town":
                     switch(yourChoice){
