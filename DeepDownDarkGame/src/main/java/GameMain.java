@@ -19,7 +19,7 @@ public class GameMain {
     //Fonts
     Font titleFont = new Font("Times New Roman", Font.PLAIN, 60);
     Font normalFont = new Font("Times New Roman", Font.PLAIN, 28);
-    Font smallFont = new Font("Times New Roman", Font.PLAIN, 12);
+    Font smallFont = new Font("Times New Roman", Font.PLAIN, 20);
 
     //Game World
     int level;
@@ -44,13 +44,16 @@ public class GameMain {
     int armDropChance; //%
     int exploreChance; //%
     int bossCrowns;
+    int hitRating;
 
     //Monsters
     String [] monsterArray = new String[5];
+    String monsterType;
     int monsterHp;
     int monsterAc;
     int monsterMp;
     int monsterDmg;
+    int monHitRating;
 
     //Main Game Loop
     public static void main(String[] args) {
@@ -62,7 +65,7 @@ public class GameMain {
 
         //Game UI
         window = new JFrame();
-        window.setSize(800, 600);
+        window.setSize(1440, 900);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.getContentPane().setBackground(Color.BLACK);
         window.setLayout(null);
@@ -116,7 +119,7 @@ public class GameMain {
         mainTextPanel.add(mainTextArea);
 
         choiceButtonPanel = new JPanel();
-        choiceButtonPanel.setBounds(250, 350, 350, 250);
+        choiceButtonPanel.setBounds(250, 350, 650, 350);
         choiceButtonPanel.setBackground(Color.BLACK);
         choiceButtonPanel.setLayout(new GridLayout(4, 1));
         con.add(choiceButtonPanel);
@@ -170,7 +173,7 @@ public class GameMain {
         choiceButtonPanel.add(choice6);
 
         playerPanel = new JPanel();
-        playerPanel.setBounds(100, 15, 800, 50);
+        playerPanel.setBounds(100, 15, 1300, 50);
         playerPanel.setBackground(Color.BLACK);
         playerPanel.setLayout(new GridLayout(1, 4));
         con.add(playerPanel);
@@ -237,7 +240,7 @@ public class GameMain {
          hp = 60 + level;
          mp = 10 + level;
          luck = 5;
-         atkDmg = 15 + level;
+         atkDmg = new Random().nextInt(15) + level;
          numHpPots = 2;
          numMpPots = 0;
          hpPotsHealingAmount = 15;
@@ -249,6 +252,7 @@ public class GameMain {
          exploreChance = 35; //%
          bossCrowns = 0;
          level = 1;
+         hitRating = 5;
 
          classLabel.setText("Class:" + classType);
          hpLabel.setText("HP:" + hp);
@@ -321,38 +325,48 @@ public class GameMain {
         locLabel.setText("loc:Battle");
 
         if(populateMonsters() == 0){
+            monsterType = "Zombie";
             monsterHp = (int) getRandomIntegerBetweenRange(0, 5) + 10 + level;
-            monsterAc = 5 + level / 2;
+            monsterAc = 5 + level;
             monsterMp = 0 + level;
             monsterDmg = (int) getRandomIntegerBetweenRange(0, 5) + level;
+            monHitRating = 1 + level;
 
             mainTextArea.setText("You encounter a Zombie!\n\n HP:" + monsterHp);
         }else if(populateMonsters() == 1){
+            monsterType = "Skeleton";
             monsterHp = (int) getRandomIntegerBetweenRange(0, 5) + 10 + level;
-            monsterAc = 5 + level / 2;
+            monsterAc = 5 + level;
             monsterMp = 0 + level;
             monsterDmg = (int) getRandomIntegerBetweenRange(0, 5) + level;
+            monHitRating = 1 + level;
 
             mainTextArea.setText("You encounter a Skeleton!\n\n HP:" + monsterHp);
         }else if(populateMonsters() == 2){
+            monsterType = "Giant Rat";
             monsterHp = (int) getRandomIntegerBetweenRange(0, 5) + 10 + level;
-            monsterAc = 5 + level / 2;
+            monsterAc = 5 + level;
             monsterMp = 0 + level;
             monsterDmg = (int) getRandomIntegerBetweenRange(0, 5) + level;
+            monHitRating = 1 + level;
 
             mainTextArea.setText("You encounter a Giant Rat!\n\n HP:" + monsterHp);
         }else if(populateMonsters() == 3){
+            monsterType = "Giant Spider";
             monsterHp = (int) getRandomIntegerBetweenRange(0, 5) + 10 + level;
-            monsterAc = 5 + level / 2;
+            monsterAc = 5 + level;
             monsterMp = 0 + level;
             monsterDmg = (int) getRandomIntegerBetweenRange(0, 5) + level;
+            monHitRating = 1 + level;
 
             mainTextArea.setText("You encounter a Giant Spider!\n\n HP:" + monsterHp);
         }else if(populateMonsters() == 4){
+            monsterType = "Ghoul";
             monsterHp = (int) getRandomIntegerBetweenRange(0, 5) + 10 + level;
-            monsterAc = 5 + level / 2;
+            monsterAc = 5 + level;
             monsterMp = 0 + level;
             monsterDmg = (int) getRandomIntegerBetweenRange(0, 5) + level;
+            monHitRating = 1 + level;
 
             mainTextArea.setText("You encounter a Ghoul!\n\n HP:" + monsterHp);
         }
@@ -361,7 +375,7 @@ public class GameMain {
         }
 
         choice1.setText("Attack");
-        choice2.setText("Attempt to run");
+        choice2.setText("Keep exploring");
         choice3.setText("");
         choice4.setText("");
         choice5.setText("");
@@ -381,7 +395,88 @@ public class GameMain {
     }
 
     public void playerAttack(){
+        location = "Player Attack";
+        locLabel.setText("Loc:Player ATK");
 
+        //If the player is not dead, keep fighting
+        if(hp > 0){
+            //Resolve player dmg to monster
+            int hitCheck = new Random().nextInt(21) + hitRating;
+
+            atkDmg = new Random().nextInt(15) + level;
+
+            if(hitCheck > monsterAc){
+                monsterHp -= atkDmg;
+            }
+
+            //If the monster is not dead, keep fighting
+            if(monsterHp > 0){
+                //Reslove monster dmg to player
+                int monHitCheck = new Random().nextInt(21) + monHitRating;
+
+                monsterDmg = new Random().nextInt(10) + level;
+
+                if(monHitCheck > ac){
+                    hp -= monsterDmg;
+                    hpLabel.setText("HP:" + hp);
+                }
+
+                mainTextArea.setText(classType + " hits " + monsterType + " for " + atkDmg + "\n\n" + monsterType + " HP is now " + monsterHp
+                        + "\n\n" + monsterType + " hits " + classType + " for " + monsterDmg);
+
+                choice1.setText("Attack");
+                choice2.setText("Attempt to run");
+                choice3.setText("");
+                choice4.setText("");
+                choice5.setText("");
+                choice6.setText("");
+            }
+
+        }
+
+        if(hp <= 0){
+            loseGame();
+        }
+
+        if(monsterHp <= 0){
+            mainTextArea.setText("You have slain the " + monsterType);
+            loot();
+        }
+
+
+    }
+
+    public void loot(){
+        location = "Loot";
+        locLabel.setText("Loc:Loot");
+        int rollForLoot = new Random().nextInt(8);
+
+        if(rollForLoot > 4){
+            int loot = gold += 1 + level;
+            goldLabel.setText("GP:" + gold);
+
+            mainTextArea.setText("You looted " + loot + " gold");
+        }
+
+        choice1.setText("Keep exploring");
+        choice2.setText("Return to town");
+        choice3.setText("");
+        choice4.setText("");
+        choice5.setText("");
+        choice6.setText("");
+    }
+
+    public void loseGame(){
+        location = "Game Over";
+        locLabel.setText("Loc:Game Over");
+        mainTextArea.setText("Your clear eyes have been shut \nand the hope in your heart snuffed out!\n\n What will you do?");
+
+        choice1.setText("Play Again?");
+        choice2.setText("");
+        choice3.setText("");
+        choice4.setText("");
+        choice5.setText("");
+        choice6.setText("");
     }
 
     public void fighter(){
@@ -593,9 +688,21 @@ public class GameMain {
                     }
                     break;
                 case "Battle":
+                case "Player Attack":
                     switch(yourChoice){
                         case "c1": playerAttack(); break;
-                        case "c2": deepDownDark(); break;
+                        case "c2": monster(); break;
+                    }
+                    break;
+                case "Game Over":
+                    switch(yourChoice){
+                        case "c1": townGate(); break;
+                    }
+                    break;
+                case "Loot":
+                    switch(yourChoice){
+                        case "c1": monster(); break;
+                        case "c2": town(); break;
                     }
 
             }
