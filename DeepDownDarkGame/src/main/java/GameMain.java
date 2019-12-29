@@ -9,9 +9,9 @@ public class GameMain {
 
     JFrame window;
     Container con;
-    JPanel titleNamePanel, startButtonPanel, mainTextPanel, choiceButtonPanel;
-    JLabel titleNameLabel;
-    JButton startButton, choice1, choice2, choice3, choice4;
+    JPanel titleNamePanel, startButtonPanel, mainTextPanel, choiceButtonPanel, playerPanel;
+    JLabel titleNameLabel, hpLabel, mpLabel, weaponLable, acLabel, goldLabel, bossCrownLabel;
+    JButton startButton, choice1, choice2, choice3, choice4, choice5, choice6;
     JTextArea mainTextArea;
 
     TitleScreenHandler tsHandler = new TitleScreenHandler();
@@ -19,7 +19,47 @@ public class GameMain {
     //Fonts
     Font titleFont = new Font("Times New Roman", Font.PLAIN, 60);
     Font normalFont = new Font("Times New Roman", Font.PLAIN, 30);
+    Font smallFont = new Font("Times New Roman", Font.PLAIN, 10);
 
+    //System objects
+    Scanner scanIn = new Scanner(System.in);
+    Random rand = new Random();
+
+    //Game vars
+    String[] enemies = {"Skeleton", "Zombie", "Warrior", "Assassin", "Ghoul", "Tusker", "Dire Wolf", "Giant Rat", "Giant Spider", "Swarm of Rats", "Gelatinous Cube", "Drow"};
+    String[] wep = {"Dagger", "Spear", "Crossbow", "Long Sword", "Short Sword", "Saber", "Maul", "Morning Star", "Great Axe", "Staff", "Mace", "Warhammer", "Flail"};
+    String[] arm = {"Bronze Chestplate", "Chainmail Shirt", "Leather Bracers", "Wooden Buckler"};
+    String[] trait = {"Shiny", "Rusty", "Bent", "Blazing", "Frozen"};
+    String[] quality = {"Uncommon", "Rare", "Epic", "Artifact", "Mythical"};
+
+    int level = 1;
+    int maxEnemyhealth = 18 + level;
+    int maxEnemyAtkDmg = 12 + level;
+
+    boolean running = true;
+    boolean pickClass = false;
+
+    //Player vars
+    String classType;
+    int goldAward;
+    int gold;
+    int ac;
+    int hp;
+    int mp;
+    int luck;
+    int atkDmg;
+    int numHpPots;
+    int numMpPots;
+    int hpPotsHealingAmount;
+    int mpPotsAmount;
+    int hpPotDropChance; //%
+    int mpPotDropChance; //%
+    int wepDropChance; //%
+    int armDropChance; //%
+    int exploreChance; //%
+    int bossCrowns;
+
+    //Main Game Loop
     public static void main(String[] args) {
 
         new GameMain();
@@ -27,6 +67,7 @@ public class GameMain {
 
     public GameMain(){
 
+        //Game UI
         window = new JFrame();
         window.setSize(800, 600);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,44 +101,7 @@ public class GameMain {
 
         window.setVisible(true);
 
-        //System objects
-        Scanner scanIn = new Scanner(System.in);
-        Random rand = new Random();
-
-        //Game vars
-        //TODO read enemies in from flat flie/data source
-        String[] enemies = {"Skeleton", "Zombie", "Warrior", "Assassin", "Ghoul", "Tusker", "Dire Wolf", "Giant Rat", "Giant Spider", "Swarm of Rats", "Gelatinous Cube", "Drow"};
-        String[] wep = {"Dagger", "Spear", "Crossbow", "Long Sword", "Short Sword", "Saber", "Maul", "Morning Star", "Great Axe", "Staff", "Mace", "Warhammer", "Flail"};
-        String[] arm = {"Bronze Chestplate", "Chainmail Shirt", "Leather Bracers", "Wooden Buckler"};
-        String[] trait = {"Shiny", "Rusty", "Bent", "Blazing", "Frozen"};
-        String[] quality = {"Uncommon", "Rare", "Epic", "Artifact", "Mythical"};
-        int level = 1;
-        int maxEnemyhealth = 18 + level;
-        int maxEnemyAtkDmg = 12 + level;
-
-        //Player vars
-        String classType = " ";
-        int goldAward = 2 + level;
-        int gold = 0;
-        int ac = 1;
-        int hp = 60 + level;
-        int mp = 10 + level;
-        int luck = 5;
-        int atkDmg = 15 + level;
-        int numHpPots = 2;
-        int numMpPots = 0;
-        int hpPotsHealingAmount = 15;
-        int mpPotsAmount = 10;
-        int hpPotDropChance = 35; //%
-        int mpPotDropChance = 10; //%
-        int wepDropChance = 15; //%
-        int armDropChance = 10; //%
-        int exploreChance = 35; //%
-        int bossCrowns = 0;
-
-        boolean running = true;
-        boolean pickClass = false;
-
+        //Game Logic
         System.out.println("Welcome to the Deep Down Dark!");
         System.out.println("\n\tWhat class would you like to play?");
         System.out.println("\t1. Fighter");
@@ -630,6 +634,7 @@ public class GameMain {
 
     }
 
+    //Game Screen
     public void createGameScreen(){
 
         //Disable previous panels
@@ -641,7 +646,7 @@ public class GameMain {
         mainTextPanel.setBackground(Color.BLACK);
         con.add(mainTextPanel);
 
-        mainTextArea = new JTextArea("This is the main text area.");
+        mainTextArea = new JTextArea();
         mainTextArea.setBounds(100, 100, 600, 250);
         mainTextArea.setBackground(Color.BLACK);
         mainTextArea.setForeground(Color.WHITE);
@@ -678,6 +683,91 @@ public class GameMain {
         choice4.setForeground(Color.BLACK);
         choice4.setFont(normalFont);
         choiceButtonPanel.add(choice4);
+
+        choice5 = new JButton("5");
+        choice5.setBackground(Color.WHITE);
+        choice5.setForeground(Color.BLACK);
+        choice5.setFont(normalFont);
+        choiceButtonPanel.add(choice5);
+
+        choice6 = new JButton("6");
+        choice6.setBackground(Color.WHITE);
+        choice6.setForeground(Color.BLACK);
+        choice6.setFont(normalFont);
+        choiceButtonPanel.add(choice6);
+
+        playerPanel = new JPanel();
+        playerPanel.setBounds(100, 15, 600, 50);
+        playerPanel.setBackground(Color.BLACK);
+        playerPanel.setLayout(new GridLayout(1, 4));
+        con.add(playerPanel);
+
+        hpLabel = new JLabel();
+        hpLabel.setFont(smallFont);
+        hpLabel.setForeground(Color.WHITE);
+        playerPanel.add(hpLabel);
+
+        acLabel = new JLabel();
+        acLabel.setFont(smallFont);
+        acLabel.setForeground(Color.WHITE);
+        playerPanel.add(acLabel);
+
+        mpLabel = new JLabel();
+        mpLabel.setFont(smallFont);
+        mpLabel.setForeground(Color.WHITE);
+        playerPanel.add(mpLabel);
+
+        goldLabel = new JLabel();
+        goldLabel.setFont(smallFont);
+        goldLabel.setForeground(Color.WHITE);
+        playerPanel.add(goldLabel);
+
+        bossCrownLabel = new JLabel();
+        bossCrownLabel.setFont(smallFont);
+        bossCrownLabel.setForeground(Color.WHITE);
+        playerPanel.add(bossCrownLabel);
+
+        weaponLable = new JLabel();
+        weaponLable.setFont(smallFont);
+        weaponLable.setForeground(Color.WHITE);
+        playerPanel.add(weaponLable);
+
+        playerSetup();
+
+    }
+
+    public void playerSetup(){
+         String classType = " ";
+         goldAward = 2 + level;
+         gold = 0;
+         ac = 1;
+         hp = 60 + level;
+         mp = 10 + level;
+         luck = 5;
+         atkDmg = 15 + level;
+         numHpPots = 2;
+         numMpPots = 0;
+         hpPotsHealingAmount = 15;
+         mpPotsAmount = 10;
+         hpPotDropChance = 35; //%
+         mpPotDropChance = 10; //%
+         wepDropChance = 15; //%
+         armDropChance = 10; //%
+         exploreChance = 35; //%
+         bossCrowns = 0;
+
+         hpLabel.setText("HP:" + hp);
+         goldLabel.setText("GP:" + gold);
+         acLabel.setText("AC:" + ac);
+         mpLabel.setText("MP:" + mp);
+         bossCrownLabel.setText("Crowns:" + bossCrowns);
+         weaponLable.setText("Wep:");
+
+         townGate();
+    }
+
+    public void townGate(){
+        mainTextArea.setText("Welcome to Deep Down Dark!\nWhat Class would you like to play?");
     }
 
     public class TitleScreenHandler implements ActionListener{
@@ -688,4 +778,5 @@ public class GameMain {
             createGameScreen();
         }
     }
+
 }
