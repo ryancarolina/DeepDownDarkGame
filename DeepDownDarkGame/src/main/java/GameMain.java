@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class GameMain {
 
@@ -20,10 +21,11 @@ public class GameMain {
     Font normalFont = new Font("Times New Roman", Font.PLAIN, 28);
     Font smallFont = new Font("Times New Roman", Font.PLAIN, 12);
 
-    int level = 1;
+    //Game World
+    int level;
     boolean pickClass = false;
 
-    //Player vars
+    //Player
     String classType, location;
     int goldAward;
     int gold;
@@ -42,6 +44,13 @@ public class GameMain {
     int armDropChance; //%
     int exploreChance; //%
     int bossCrowns;
+
+    //Monsters
+    String [] monsterArray = new String[5];
+    int monsterHp;
+    int monsterAc;
+    int monsterMp;
+    int monsterDmg;
 
     //Main Game Loop
     public static void main(String[] args) {
@@ -239,6 +248,7 @@ public class GameMain {
          armDropChance = 10; //%
          exploreChance = 35; //%
          bossCrowns = 0;
+         level = 1;
 
          classLabel.setText("Class:" + classType);
          hpLabel.setText("HP:" + hp);
@@ -299,11 +309,79 @@ public class GameMain {
         mainTextArea.setText("You enter the DEEP DOWN DARK with clear eyes \nand hope in your heart!\n\n What will you do?");
 
         choice1.setText("Light your torch and have at them!");
-        choice2.setText("Ponder your life choices");
+        choice2.setText("Back to the road");
         choice3.setText("");
         choice4.setText("");
         choice5.setText("");
-        choice6.setText("Back to the road");
+        choice6.setText("");
+    }
+
+    public void monster(){
+        location = "Battle";
+        locLabel.setText("loc:Battle");
+
+        if(populateMonsters() == 0){
+            monsterHp = (int) getRandomIntegerBetweenRange(0, 5) + 10 + level;
+            monsterAc = 5 + level / 2;
+            monsterMp = 0 + level;
+            monsterDmg = (int) getRandomIntegerBetweenRange(0, 5) + level;
+
+            mainTextArea.setText("You encounter a Zombie!\n\n HP:" + monsterHp);
+        }else if(populateMonsters() == 1){
+            monsterHp = (int) getRandomIntegerBetweenRange(0, 5) + 10 + level;
+            monsterAc = 5 + level / 2;
+            monsterMp = 0 + level;
+            monsterDmg = (int) getRandomIntegerBetweenRange(0, 5) + level;
+
+            mainTextArea.setText("You encounter a Skeleton!\n\n HP:" + monsterHp);
+        }else if(populateMonsters() == 2){
+            monsterHp = (int) getRandomIntegerBetweenRange(0, 5) + 10 + level;
+            monsterAc = 5 + level / 2;
+            monsterMp = 0 + level;
+            monsterDmg = (int) getRandomIntegerBetweenRange(0, 5) + level;
+
+            mainTextArea.setText("You encounter a Giant Rat!\n\n HP:" + monsterHp);
+        }else if(populateMonsters() == 3){
+            monsterHp = (int) getRandomIntegerBetweenRange(0, 5) + 10 + level;
+            monsterAc = 5 + level / 2;
+            monsterMp = 0 + level;
+            monsterDmg = (int) getRandomIntegerBetweenRange(0, 5) + level;
+
+            mainTextArea.setText("You encounter a Giant Spider!\n\n HP:" + monsterHp);
+        }else if(populateMonsters() == 4){
+            monsterHp = (int) getRandomIntegerBetweenRange(0, 5) + 10 + level;
+            monsterAc = 5 + level / 2;
+            monsterMp = 0 + level;
+            monsterDmg = (int) getRandomIntegerBetweenRange(0, 5) + level;
+
+            mainTextArea.setText("You encounter a Ghoul!\n\n HP:" + monsterHp);
+        }
+        else{
+            mainTextArea.setText("Nothing lurks here...");
+        }
+
+        choice1.setText("Attack");
+        choice2.setText("Attempt to run");
+        choice3.setText("");
+        choice4.setText("");
+        choice5.setText("");
+        choice6.setText("");
+
+    }
+
+    public int populateMonsters(){
+        monsterArray[0] = "Zombie";
+        monsterArray[1] = "Skeleton";
+        monsterArray[2] = "Giant Rat";
+        monsterArray[3] = "Giant Spider";
+        monsterArray[4] = "Ghoul";
+
+        int rnd = new Random().nextInt(monsterArray.length);
+        return rnd;
+    }
+
+    public void playerAttack(){
+
     }
 
     public void fighter(){
@@ -453,6 +531,11 @@ public class GameMain {
         choice6.setText("");
     }
 
+    public static double getRandomIntegerBetweenRange(double min, double max){
+        double x = (int)(Math.random()*((max-min)+1))+min;
+        return x;
+    }
+
     public class TitleScreenHandler implements ActionListener{
 
         @Override
@@ -495,11 +578,24 @@ public class GameMain {
                         case "c1": town(); break;
                         case "c2": deepDownDark(); break;
                     }
+                    break;
                 case "Town":
                     switch(yourChoice){
                         case "c1": break;
                         case "c2": break; //todo add smith and shop here
                         case "c6": roadOutsideTownGate(); break;
+                    }
+                    break;
+                case "DEEP DOWN DARK":
+                    switch(yourChoice){
+                        case "c1": monster(); break;
+                        case "c2": roadOutsideTownGate(); break;
+                    }
+                    break;
+                case "Battle":
+                    switch(yourChoice){
+                        case "c1": playerAttack(); break;
+                        case "c2": deepDownDark(); break;
                     }
 
             }
