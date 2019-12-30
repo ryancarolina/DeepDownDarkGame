@@ -1,8 +1,10 @@
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Objects;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class GameMain {
@@ -57,12 +59,12 @@ public class GameMain {
     int monHitRating;
 
     //Main Game Loop
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 
         new GameMain();
     }
 
-    public GameMain(){
+    public GameMain() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 
         //Game UI
         window = new JFrame();
@@ -94,10 +96,11 @@ public class GameMain {
 
         //Town Gate Image
         townGatePanel = new JPanel();
-        townGatePanel.setBounds(800, 50, 600, 800);
+        townGatePanel.setBounds(920, 100, 500, 700);
         townGatePanel.setBackground(Color.BLACK);
 
-        townGateLabel = new JLabel(new ImageIcon("DeepDownDarkGame/src/main/Resources/Dungeon_Hallway.png"));
+        //todo use if statement to check loc and change image
+        townGateLabel = new JLabel(new ImageIcon("DeepDownDarkGame/src/main/Resources/Dungeon_Entrance500x700.jpg"));
 
         titleNamePanel.add(titleNameLabel);
         startButtonPanel.add(startButton);
@@ -106,16 +109,22 @@ public class GameMain {
         con.add(titleNamePanel);
         con.add(startButtonPanel);
 
+        //Play title song
+        PlayMusic musicPlayer = new PlayMusic();
+        musicPlayer.playMusic("DeepDownDarkGame/src/main/Resources/alexander-nakarada-cold-journey.wav");
+
         window.setVisible(true);
     }
 
     //Game Screen
     public void createGameScreen(){
 
+
+
         //Disable previous panels
         titleNamePanel.setVisible(false);
         startButtonPanel.setVisible(false);
-        townGatePanel.setVisible(false);
+        //townGatePanel.setVisible(false);
 
         mainTextPanel = new JPanel();
         mainTextPanel.setBounds(100, 100, 600, 250);
@@ -646,6 +655,42 @@ public class GameMain {
         choice4.setText("");
         choice5.setText("");
         choice6.setText("");
+    }
+
+    //Music/SFX
+    public static class PlayMusic{
+
+        //Title Song
+        //DeepDownDarkGame/src/main/Resources/alexander-nakarada-cold-journey.wav
+
+        public AudioInputStream audioStream(String filePath) throws IOException, UnsupportedAudioFileException {
+            return AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+        }
+
+        Clip clip = AudioSystem.getClip();
+
+        public PlayMusic() throws LineUnavailableException {
+        }
+
+        public void playMusic(String filePath){
+            try {
+                clip.open(audioStream(filePath));
+                clip.start();
+            } catch(Exception ex) {
+                System.out.println("Error with playing sound.");
+                ex.printStackTrace();
+            }
+        }
+
+        public void stopMusic(){
+            try{
+                clip.stop();
+                clip.close();
+            }catch (Exception e){
+                System.out.println(e + "Error with stopping sound");
+            }
+        }
+
     }
 
     public static double getRandomIntegerBetweenRange(double min, double max){
