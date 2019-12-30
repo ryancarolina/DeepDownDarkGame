@@ -2,14 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 import java.util.Random;
 
 public class GameMain {
 
     JFrame window;
     Container con;
-    JPanel titleNamePanel, startButtonPanel, mainTextPanel, choiceButtonPanel, playerPanel;
-    JLabel titleNameLabel, classLabel, hpLabel, mpLabel, weaponLable, acLabel, goldLabel, bossCrownLabel, locLabel, healingLabel, luckLabel;
+    JPanel titleNamePanel, startButtonPanel, mainTextPanel, choiceButtonPanel, playerPanel, townGatePanel;
+    JLabel titleNameLabel, classLabel, hpLabel, mpLabel, weaponLable, acLabel, goldLabel, bossCrownLabel, locLabel, healingLabel, luckLabel, townGateLabel;
     JButton startButton, choice1, choice2, choice3, choice4, choice5, choice6;
     JTextArea mainTextArea;
 
@@ -75,6 +76,7 @@ public class GameMain {
         titleNamePanel = new JPanel();
         titleNamePanel.setBounds(100, 100, 600, 150);
         titleNamePanel.setBackground(Color.BLACK);
+
         titleNameLabel = new JLabel("DEEP DOWN DARK");
         titleNameLabel.setForeground(Color.WHITE);
         titleNameLabel.setFont(titleFont);
@@ -90,8 +92,17 @@ public class GameMain {
         startButton.setFont(normalFont);
         startButton.addActionListener(tsHandler);
 
+        //Town Gate Image
+        townGatePanel = new JPanel();
+        townGatePanel.setBounds(800, 50, 600, 800);
+        townGatePanel.setBackground(Color.BLACK);
+
+        townGateLabel = new JLabel(new ImageIcon("DeepDownDarkGame/src/main/Resources/Dungeon_Hallway.png"));
+
         titleNamePanel.add(titleNameLabel);
         startButtonPanel.add(startButton);
+        townGatePanel.add(townGateLabel);
+        con.add(townGatePanel);
         con.add(titleNamePanel);
         con.add(startButtonPanel);
 
@@ -104,6 +115,7 @@ public class GameMain {
         //Disable previous panels
         titleNamePanel.setVisible(false);
         startButtonPanel.setVisible(false);
+        townGatePanel.setVisible(false);
 
         mainTextPanel = new JPanel();
         mainTextPanel.setBounds(100, 100, 600, 250);
@@ -477,6 +489,16 @@ public class GameMain {
         choice4.setText("");
         choice5.setText("");
         choice6.setText("");
+    }
+
+    //TODO Create shop
+    public void shop(){
+
+    }
+
+    //TODO Create smith
+    public void smith(){
+
     }
 
     public void fighter(){
